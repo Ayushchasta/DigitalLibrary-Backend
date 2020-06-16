@@ -14,17 +14,22 @@ class Books extends Controller
 	public function InsertBook(Request $req)
 	{
 	
-		error_log('CreateUser');
+		error_log('InsertBook');
+		$fileName = $req->file('file')->store('Uploads');
+		echo $fileName;
 
-		$data = $req->json()->all();
+		$bookName = $req->input('bookName');
+		$bookPublisher = $req->input('bookPublisher');
+		$bookAuthor = $req->input('bookAuthor');
 
 		$user= DB::table('books')
 		
 		->insert(
 		[
-			'bookname' => $data['bookName'],
-			'author' => $data['bookAuthor'],
-			'publisher' => $data['bookPublisher'],
+			'fileName' => $fileName,
+			'bookname' => $bookName,
+			'author' => $bookAuthor,
+			'publisher' => $bookPublisher,
 
 		]
 		);
