@@ -22,9 +22,9 @@ class Books extends Controller
 		
 		->insert(
 		[
-			'bookname' => $data['bookname'],
-			'author' => $data['author'],
-			'publisher' => $data['publisher'],
+			'bookname' => $data['bookName'],
+			'author' => $data['bookAuthor'],
+			'publisher' => $data['bookPublisher'],
 
 		]
 		);
