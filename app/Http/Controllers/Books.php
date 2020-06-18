@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\File;
+use Illuminate\Support\Facades\File as LaraFile;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class Books extends Controller
 {
@@ -42,13 +47,12 @@ class Books extends Controller
 
 		$fileName = DB::table('books')->where('id', $bookId)->pluck('fileName');
 
-		error_log($fileName);
-		//$delete= File::delete(storage_path('app/'.$fileName), $bookName.'.pdf');
+		error_log($fileName[0]);
 
-
-       // File::unlink('app/'.$fileName);
-
-       // $deleteImage = Storage::where('fileName', $fileName)->delete();
+		error_log("Removing"); 
+		//unlink(storage_path('app/'.$filename[0]));
+		Storage::delete($fileName[0]);
+		error_log("Removed"); 
 
 		$user= DB::table('books')
 		->where('id', $bookId)
