@@ -37,15 +37,30 @@ class Books extends Controller
 
 	public function DeleteBook(Request $req, $bookId)
 	{
-	
 		error_log('DeleteBook');
 		error_log($bookId);
-		$data = $req->json()->all();
+
+		$fileName = DB::table('books')->where('id', $bookId)->pluck('fileName');
+
+		error_log($fileName);
+		//$delete= File::delete(storage_path('app/'.$fileName), $bookName.'.pdf');
+
+
+       // File::unlink('app/'.$fileName);
+
+       // $deleteImage = Storage::where('fileName', $fileName)->delete();
 
 		$user= DB::table('books')
-		->where('id',$bookId)
+		->where('id', $bookId)
 		->delete();
-		
-	   // $data['id']
+	}
+
+	public function DownloadBook(Request $req, $fileName)
+	{
+		error_log('DownloadBook');
+		$bookName = $req->input('bookName');
+		error_log($fileName);
+		error_log($bookName);
+		return response()->download(storage_path('app/Uploads/'.$fileName), $bookName.'.pdf');
 	}
 }
