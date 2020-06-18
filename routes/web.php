@@ -25,6 +25,9 @@ Route::delete('/user/{userId}','Users@DeleteUser');
 //Route::delete('/user/{userId}', array('middleware' => 'CORS', 'uses' => 'Users@DeleteUser'));
 Route::get('/books','Books@GetBooks');
 Route::post('/book','Books@InsertBook');
-Route::delete('/book/{bookId}','Books@DeleteBook')->name('rbKO37moSGLtH7rv4CSR2MXhrXffhNp6uDk9EE0M.pdf');
+Route::delete('/book/{bookId}','Books@DeleteBook');
 Route::post('/upload','Upload@UploadFile');
 Route::get('/download/{fileNames}','Books@DownloadBook');
+
+Route::get('/view/{fileNames}','Books@ViewBook');
+

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\File;
 use Illuminate\Support\Facades\File as LaraFile;
@@ -32,7 +33,7 @@ class Books extends Controller
 		->insert(
 		[
 			'fileName' => $fileName,
-			'bookname' => $bookName,
+			'bookName' => $bookName,
 			'author' => $bookAuthor,
 			'publisher' => $bookPublisher,
 
@@ -52,7 +53,7 @@ class Books extends Controller
 		error_log("Removing"); 
 		//unlink(storage_path('app/'.$filename[0]));
 		Storage::delete($fileName[0]);
-		error_log("Removed"); 
+		error_log("Deleted"); 
 
 		$user= DB::table('books')
 		->where('id', $bookId)
@@ -65,6 +66,14 @@ class Books extends Controller
 		$bookName = $req->input('bookName');
 		error_log($fileName);
 		error_log($bookName);
-		return response()->download(storage_path('app/Uploads/'.$fileName), $bookName.'.pdf');
+
+		return Storage::download('Uploads/' . $fileName , $bookName . '.pdf');
 	}
+
+	public function ViewBook(Request $req, $fileName)
+	{
+		error_log('DownloadBook');
+		return Storage::Response('Uploads/' . $fileName);
+	}
+
 }
