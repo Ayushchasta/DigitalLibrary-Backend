@@ -7,44 +7,36 @@ use Illuminate\Support\Facades\DB;
 
 class Users extends Controller
 {
-    public function UserList()
+    public function userList()
 	{
 		return DB::table('users')->get();
 	}
-	public function ReaderList()
-	{
-		return DB::table('users')
-		->where('role','reader')
-		->get();
-
-	}
-	public function LibList()
-	{
-		error_log('LibrarianList');
-		return DB::table('users')
-		->where('role','librarian')
-		->get();
-	}
-	public function InsertUser(Request $req)
+	public function insertUser(Request $req)
 	{
 	
 		error_log('CreateUser');
 
 		$data = $req->json()->all();
 
-		$user= DB::table('users')
-		
-		->insert(
-		[
-			'name' => $data['name'],
-			'role' => $data['role'],
-			'mobile_no' => $data['mobile_no'],
-			'password' => $data['password'],
-		]
-		);
+		$check = $data['role'];
+
+		if( $check == 'READER' || $check == 'PUBLISHER')
+		{
+			$user= DB::table('users')
+			
+			->insert(
+			[
+				'name' => $data['name'],
+				'role' => $data['role'],
+				'mobile_no' => $data['mobile_no'],
+				'password' => $data['password'],
+			]
+			);
+		}
+
 	}
 
-	public function DeleteUser(Request $req, $userId)
+	public function deleteUser(Request $req, $userId)
 	{
 	
 		error_log('DeleteUser');
@@ -58,12 +50,12 @@ class Users extends Controller
 	   // $data['id']
 	}
 
-	public function UserStatus(Request $req, $userId, $newStatus)
+	public function userStatus(Request $req, $userId, $newStatus)
 	{
 		error_log($userId);
 		error_log($newStatus);
 
-		if($newStatus == "ACTIVATE" || $newStatus == "INACTIVATE")
+		if($newStatus == "ACTIVE" || $newStatus == "INACTIVE")
 		{
 			return DB::table('users')
 			->where('id',$userId)

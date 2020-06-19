@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Storage;
 
 class Books extends Controller
 {
-    public function GetBooks()
+    public function getBooks()
 	{
 		return DB::table('books')->get();
 	}
-	public function InsertBook(Request $req)
+	public function insertBook(Request $req)
 	{
 	
 		error_log('InsertBook');
@@ -41,7 +41,7 @@ class Books extends Controller
 		);
 	}
 
-	public function DeleteBook(Request $req, $bookId)
+	public function deleteBook(Request $req, $bookId)
 	{
 		error_log('DeleteBook');
 		error_log($bookId);
@@ -60,7 +60,7 @@ class Books extends Controller
 		->delete();
 	}
 
-	public function DownloadBook(Request $req, $fileName)
+	public function downloadBook(Request $req, $fileName)
 	{
 		error_log('DownloadBook');
 		$bookName = $req->input('bookName');
@@ -70,13 +70,13 @@ class Books extends Controller
 		return Storage::download('Uploads/' . $fileName , $bookName . '.pdf');
 	}
 
-	public function ViewBook(Request $req, $fileName)
+	public function viewBook(Request $req, $fileName)
 	{
 		error_log('DownloadBook');
 		return Storage::Response('Uploads/' . $fileName);
 	}
 
-	public function BookStatus(Request $req, $bookId, $adminStatus)
+	public function bookStatus(Request $req, $bookId, $adminStatus)
 	{
 		error_log($bookId);
 		error_log($adminStatus);
