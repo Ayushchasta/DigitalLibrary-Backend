@@ -41,6 +41,7 @@ class Users extends Controller
 			'mobile_no' => $data['mobile_no'],
 			'password' => $data['password'],
 
+
 		]
 		);
 	}
