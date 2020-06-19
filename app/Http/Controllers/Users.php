@@ -40,8 +40,6 @@ class Users extends Controller
 			'role' => $data['role'],
 			'mobile_no' => $data['mobile_no'],
 			'password' => $data['password'],
-
-
 		]
 		);
 	}
@@ -59,6 +57,21 @@ class Users extends Controller
 		
 	   // $data['id']
 	}
+
+	public function UserStatus(Request $req, $userId, $newStatus)
+	{
+		error_log($userId);
+		error_log($newStatus);
+
+		if($newStatus == "ACTIVATE" || $newStatus == "INACTIVATE")
+		{
+			return DB::table('users')
+			->where('id',$userId)
+			->update([
+				'status'=> $newStatus
+			]);
+		}
+	}	
 
 }
 

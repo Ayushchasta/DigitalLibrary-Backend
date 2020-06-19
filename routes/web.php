@@ -29,5 +29,7 @@ Route::delete('/book/{bookId}','Books@DeleteBook');
 Route::post('/upload','Upload@UploadFile');
 Route::get('/download/{fileNames}','Books@DownloadBook');
 
-Route::get('/view/{fileNames}','Books@ViewBook');
+Route::put('/User/{userId}/{newStatus}','Users@UserStatus');
+
+Route::put('/Book/{bookId}/{adminStatus}','Books@BookStatus');
 

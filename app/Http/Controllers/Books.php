@@ -76,4 +76,19 @@ class Books extends Controller
 		return Storage::Response('Uploads/' . $fileName);
 	}
 
+	public function BookStatus(Request $req, $bookId, $adminStatus)
+	{
+		error_log($bookId);
+		error_log($adminStatus);
+
+		if($adminStatus == 1 || $adminStatus == 0)
+		{
+			return DB::table('books')
+			->where('id',$bookId)
+			->update([
+				'adminApproval'=> $adminStatus
+			]);
+		}
+	}	
+
 }
