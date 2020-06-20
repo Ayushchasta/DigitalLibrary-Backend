@@ -11,6 +11,7 @@ class Users extends Controller
 	{
 		return DB::table('users')->get();
 	}
+
 	public function insertUser(Request $req)
 	{
 	
@@ -44,7 +45,8 @@ class Users extends Controller
 		$data = $req->json()->all();
 
 		$user= DB::table('users')
-		->where('id',$userId)
+		->where('id', $userId)
+		->where('role', '!=' , 'ADMIN')
 		->delete();
 		
 	   // $data['id']

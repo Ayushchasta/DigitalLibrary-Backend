@@ -10,15 +10,18 @@ use Illuminate\Support\Facades\File as LaraFile;
 use Illuminate\Support\Facades\Storage;
 
 
+class Books extends Controller {
 
-class Books extends Controller
-{
-    public function getBooks()
-	{
-		return DB::table('books')->get();
+    public function getBooks() {
+
+		$rs = DB::table('books')
+				->join('users','books.uploaderId','=','users.id')
+				->get();
+
+		return $rs;
 	}
-	public function insertBook(Request $req)
-	{
+
+	public function insertBook(Request $req) {
 	
 		error_log('InsertBook');
 		$fileName = $req->file('file')->store('Uploads');
@@ -32,6 +35,7 @@ class Books extends Controller
 		
 		->insert(
 		[
+			'uploaderId' => 1,
 			'fileName' => $fileName,
 			'bookName' => $bookName,
 			'author' => $bookAuthor,
@@ -41,8 +45,7 @@ class Books extends Controller
 		);
 	}
 
-	public function deleteBook(Request $req, $bookId)
-	{
+	public function deleteBook(Request $req, $bookId) {
 		error_log('DeleteBook');
 		error_log($bookId);
 
@@ -60,24 +63,30 @@ class Books extends Controller
 		->delete();
 	}
 
-	public function downloadBook(Request $req, $fileName)
-	{
+	public function downloadBook(Request $req, $fileName) {
 		error_log('DownloadBook');
 		$bookName = $req->input('bookName');
 		error_log($fileName);
 		error_log($bookName);
 
+		$increment = DB::table('books')
+		->where('fileName', 'Uploads/'.$fileName)
+		->increment('countDownload', 1);
+
 		return Storage::download('Uploads/' . $fileName , $bookName . '.pdf');
 	}
 
-	public function viewBook(Request $req, $fileName)
-	{
+	public function viewBook(Request $req, $fileName) {
 		error_log('DownloadBook');
+
+		$increment = DB::table('books')
+		->where('fileName', 'Uploads/'.$fileName)
+		->increment('countView', 1);
+
 		return Storage::Response('Uploads/' . $fileName);
 	}
 
-	public function bookStatus(Request $req, $bookId, $adminStatus)
-	{
+	public function bookStatus(Request $req, $bookId, $adminStatus) {
 		error_log($bookId);
 		error_log($adminStatus);
 
