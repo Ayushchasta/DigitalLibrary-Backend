@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Users extends Controller
 {
-    public function userList()
+    public function getUserList()
 	{
+		error_log('i am user list');
 		return DB::table('users')->get();
 	}
 
@@ -52,7 +54,7 @@ class Users extends Controller
 	   // $data['id']
 	}
 
-	public function userStatus(Request $req, $userId, $newStatus)
+	public function updateUserStatus(Request $req, $userId, $newStatus)
 	{
 		error_log($userId);
 		error_log($newStatus);
@@ -67,5 +69,37 @@ class Users extends Controller
 		}
 	}	
 
+	public function userAuthenticate(Request $req)
+	{
+		$random = str_random(30);
+		error_log($random);
+
+		$data = $req->input();
+
+		$statusArr = DB::table('users')
+				->where('mobile_no',$data['mobileNo'])
+				->where('password',$data['password'])
+				->pluck('status');
+
+		if(count($statusArr) == 1 && $statusArr[0]=='ACTIVE'){
+
+			DB::table('users')
+			->where('status','ACTIVE')
+			->where('mobile_no',$data['mobileNo'])
+			->where('password',$data['password'])
+			->update([
+				'token' => $random
+			]);
+
+			$sql = DB::table('users')
+				->where('mobile_no',$data['mobileNo'])
+				->where('password',$data['password'])
+				->get();
+
+		return $sql;
+		}
+
+		return "User Not Active";
+	}
 }
 

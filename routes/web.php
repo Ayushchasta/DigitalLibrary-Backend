@@ -17,21 +17,37 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/Users','Users@userList');
+
+/*
+ * Admin RESTful APIs
+*/
+Route::get('/Users','Users@getUserList')->middleware('authInterceptorAdmin');
+Route::put('/User/{userId}/{newStatus}','Users@updateUserStatus')->middleware('authInterceptorAdmin');
+Route::delete('/User/{userId}','Users@deleteUser')->middleware('authInterceptorAdmin');
+
+Route::get('/Books/AllPublished','Books@getAllPublishedBooks')->middleware('authInterceptorAdmin');
+Route::put('/BookAdminApproval/{bookId}/{bookStatus}','Books@updateBookAdminStatus')->middleware('authInterceptorAdmin');
+
+/*
+ * Publisher RESTful APIs
+*/
+Route::get('/Books/MyPublished','Books@getMyPublishedBooks')->middleware('authInterceptorPublisher');
+Route::post('/Book','Books@insertBook')->middleware('authInterceptorPublisher');
+Route::delete('/Book/{bookId}','Books@deleteBook')->middleware('authInterceptorPublisher');
+Route::put('/BookPublisherApproval/{bookId}/{bookStatus}','Books@updateBookPublisherStatus')->middleware('authInterceptorPublisher');
+
+/*
+ * User RESTful APIs
+*/
+Route::get('/Books','Books@getAllActiveBooks')->middleware('authInterceptorReader'); /* Activated by admin as well as by publisher */
+Route::get('/Download/{fileNames}','Books@downloadBook')->middleware('authInterceptorReader');
+Route::get('/View/{fileNames}','Books@viewBook')->middleware('authInterceptorReader');
+
+/*
+ * Guest RESTful APIs
+*/
 Route::post('/User','Users@insertUser');
-Route::delete('/User/{userId}','Users@deleteUser');
-Route::put('/User/{userId}/{newStatus}','Users@userStatus');
-
-Route::get('/Books','Books@getBooks');
-Route::post('/Book','Books@insertBook');
-Route::delete('/Book/{bookId}','Books@deleteBook');
-Route::put('/Book/{bookId}/{adminStatus}','Books@bookStatus');
-
-Route::post('/Upload','Upload@uploadFile');
-Route::get('/Download/{fileNames}','Books@downloadBook');
-Route::get('/View/{fileNames}','Books@viewBook');
-
-
+Route::post('/Authentication/Authenticate','Users@userAuthenticate');
 
 
 

@@ -12,10 +12,66 @@ use Illuminate\Support\Facades\Storage;
 
 class Books extends Controller {
 
-    public function getBooks() {
+    public function getAllPublishedBooks() {
 
 		$rs = DB::table('books')
+				->select('books.id as id',
+						'users.name as uploaderName',
+						'books.bookName as bookName',
+						'users.id as uploaderId',
+						'books.author as author',
+						'books.publisher as publisher',
+						'books.fileName as fileName',
+						'books.adminApproval as adminApproval',
+						'books.publisherApproval as publisherApproval',
+						'books.countDownload as countDownload',
+						'books.countView as countView',)
 				->join('users','books.uploaderId','=','users.id')
+				->get();
+
+		return $rs;
+	}
+
+	public function getMyPublishedBooks(Request $req) {
+
+		error_log('message');
+		$userId = $req->header('user_id');
+		error_log($userId);
+		
+		$rs = DB::table('books')
+				->select('books.id as id',
+						'books.uploaderId as uploaderId',
+						'books.bookName as bookName',
+						'books.author as author',
+						'books.publisher as publisher',
+						'books.fileName as fileName',
+						'books.adminApproval as adminApproval',
+						'books.publisherApproval as publisherApproval',
+						'books.countDownload as countDownload',
+						'books.countView as countView')
+				->where('books.uploaderId', $userId)
+				->get();
+
+		return $rs;
+	}
+
+	public function getAllActiveBooks(Request $req) {
+
+		error_log('message');
+		
+		$rs = DB::table('books')
+				->select('books.id as id',
+						'books.uploaderId as uploaderId',
+						'books.bookName as bookName',
+						'books.author as author',
+						'books.publisher as publisher',
+						'books.fileName as fileName',
+						'books.adminApproval as adminApproval',
+						'books.publisherApproval as publisherApproval',
+						'books.countDownload as countDownload',
+						'books.countView as countView')
+				->where('books.adminApproval', 1)
+				->where('books.publisherApproval', 1)
 				->get();
 
 		return $rs;
@@ -86,7 +142,7 @@ class Books extends Controller {
 		return Storage::Response('Uploads/' . $fileName);
 	}
 
-	public function bookStatus(Request $req, $bookId, $adminStatus) {
+	public function updateBookAdminStatus(Request $req, $bookId, $adminStatus) {
 		error_log($bookId);
 		error_log($adminStatus);
 
@@ -99,5 +155,22 @@ class Books extends Controller {
 			]);
 		}
 	}	
+
+	public function updateBookPublisherStatus(Request $req, $bookId, $publisherStatus) {
+		error_log($bookId);
+		error_log($publisherStatus);
+
+		$userId = $req->header('user_id');
+
+		if($publisherStatus == 1 || $publisherStatus == 0)
+		{
+			return DB::table('books')
+			->where('id',$bookId)
+			->where('uploaderId', $userId)
+			->update([
+				'publisherApproval'=> $publisherStatus
+			]);
+		}
+	}
 
 }
