@@ -83,6 +83,8 @@ class Books extends Controller {
 		$fileName = $req->file('file')->store('Uploads');
 		echo $fileName;
 
+		$userId = $req->header('user_id');
+
 		$bookName = $req->input('bookName');
 		$bookPublisher = $req->input('bookPublisher');
 		$bookAuthor = $req->input('bookAuthor');
@@ -91,7 +93,7 @@ class Books extends Controller {
 		
 		->insert(
 		[
-			'uploaderId' => 1,
+			'uploaderId' => $userId,
 			'fileName' => $fileName,
 			'bookName' => $bookName,
 			'author' => $bookAuthor,
@@ -133,7 +135,7 @@ class Books extends Controller {
 	}
 
 	public function viewBook(Request $req, $fileName) {
-		error_log('DownloadBook');
+		error_log('ViewBook');
 
 		$increment = DB::table('books')
 		->where('fileName', 'Uploads/'.$fileName)
