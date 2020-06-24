@@ -29,9 +29,8 @@ Route::delete('/User/{userId}','Users@deleteUser')->middleware('authInterceptorA
 
 Route::get('/Books/AllPublished','Books@getAllPublishedBooks')->middleware('authInterceptorAdmin');
 Route::put('/BookAdminApproval/{bookId}/{bookStatus}','Books@updateBookAdminStatus')->middleware('authInterceptorAdmin');
-
-Route::get('/ActiveBooks','Books@getAllActiveBooks')->middleware('authInterceptorAdmin');
-Route::get('/Download/{fileName}','Books@downloadBook')->middleware('authInterceptorrAdmin'); /* Activated by admin as well as by publisher */
+Route::get('/Download/{fileName}','Books@downloadBook')->middleware('authInterceptorrAdmin');
+Route::get('/ActiveBooks','Books@getAllActiveBooks')->middleware('authInterceptorAdmin'); /* Activated by admin as well as by publisher */
 
 /*
  * Publisher RESTful APIs
@@ -48,8 +47,8 @@ Route::get('/View/{fileName}','Books@viewBook')->middleware('authInterceptorrPub
  * User RESTful APIs
 */
 Route::get('/ActiveBooks','Books@getAllActiveBooks')->middleware('authInterceptorReader'); /* Activated by admin as well as by publisher */
-Route::get('/Download/{fileName}','Books@downloadBook')->middleware('authInterceptorReader');
-Route::get('/View/{fileName}','Books@viewBook')->middleware('authInterceptorReader');
+Route::get('/Download/{fileName}','Books@downloadBook')->middleware('authInterceptorFileAccess');
+Route::get('/View/{fileName}','Books@viewBook')->middleware('authInterceptorFileAccess');
 
 /*
  * Guest RESTful APIs
