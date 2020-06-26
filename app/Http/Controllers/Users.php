@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Storage;
 class Users extends Controller
 {
     public function getUserList()
@@ -19,20 +19,42 @@ class Users extends Controller
 	
 		error_log('CreateUser');
 
-		$data = $req->json()->all();
+		$name = $req->input('name');
+		$role = $req->input('role');
+		$mobileNo = $req->input('mobile_no');
+		$password = $req->input('password');
 
-		$check = $data['role'];
+		error_log($name);
+		error_log($role);
+		error_log($mobileNo);
+		error_log($password);
+			
+		$check = $role;
 
-		if( $check == 'READER' || $check == 'PUBLISHER')
+		error_log('Going in If');
+		if( $check == 'READER'){
+			error_log('i m in reader');
+			$user= DB::table('users')
+			->insert([
+				'name' => $name,
+				'role' => $role,
+				'mobile_no' => $mobileNo,
+				'password' => $password,
+			]);
+		}else if(  $check == 'PUBLISHER' )
 		{
+			error_log('i m in publisher');
+			$fileName = $req->file('file')->store('Uploads');
+			error_log($fileName);
 			$user= DB::table('users')
 			
 			->insert(
 			[
-				'name' => $data['name'],
-				'role' => $data['role'],
-				'mobile_no' => $data['mobile_no'],
-				'password' => $data['password'],
+				'name' => $name,
+				'role' => $role,
+				'mobile_no' => $mobileNo,
+				'password' => $password,
+				'fileName' => $fileName,
 			]
 			);
 		}
@@ -100,6 +122,11 @@ class Users extends Controller
 		}
 
 		return "User Not Active";
+	}
+
+	public function viewImage(Request $req, $fileName) {
+		error_log('ViewImage');
+		return Storage::Response('Uploads/' . $fileName);
 	}
 }
 
