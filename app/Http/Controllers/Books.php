@@ -25,7 +25,8 @@ class Books extends Controller {
 						'books.adminApproval as adminApproval',
 						'books.publisherApproval as publisherApproval',
 						'books.countDownload as countDownload',
-						'books.countView as countView',)
+						'books.countView as countView',
+						'books.time as time',)
 				->join('users','books.uploaderId','=','users.id')
 				->get();
 
