@@ -134,6 +134,27 @@ class Books extends Controller {
 		return Storage::download('Uploads/' . $fileName , $bookName . '.pdf');
 	}
 
+	public function searchBook(Request $req) {
+		error_log('SearchBook1');
+		error_log($req);
+		$data = $req->input('searchString');
+		error_log('SearchBook2');
+
+		error_log($data);
+		error_log('SearchBook3');
+
+		error_log('before query');
+		$wantedBook = DB::table('books')
+		->where('bookName', 'LIKE' , '%'.$data.'%')
+		->where('books.adminApproval', 1)
+		->where('books.publisherApproval', 1)
+		->get();
+		error_log('after query');
+		error_log('after wanted called');
+
+		return $wantedBook;
+	}
+
 	public function viewBook(Request $req, $fileName) {
 		error_log('ViewBook');
 

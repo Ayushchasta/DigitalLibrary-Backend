@@ -30,6 +30,7 @@ Route::delete('/User/{userId}','Users@deleteUser')->middleware('authInterceptorA
 Route::get('/Books/AllPublished','Books@getAllPublishedBooks')->middleware('authInterceptorAdmin');
 Route::put('/BookAdminApproval/{bookId}/{bookStatus}','Books@updateBookAdminStatus')->middleware('authInterceptorAdmin');
 Route::get('/Download/{fileName}','Books@downloadBook')->middleware('authInterceptorrAdmin');
+
 Route::get('/ActiveBooks','Books@getAllActiveBooks')->middleware('authInterceptorAdmin'); /* Activated by admin as well as by publisher */
 Route::get('/ViewImg/{fileName}','Users@viewImage')->middleware('authInterceptorFileAccess');
 
@@ -50,6 +51,7 @@ Route::get('/View/{fileName}','Books@viewBook')->middleware('authInterceptorrPub
 Route::get('/ActiveBooks','Books@getAllActiveBooks')->middleware('authInterceptorReader'); /* Activated by admin as well as by publisher */
 Route::get('/Download/{fileName}','Books@downloadBook')->middleware('authInterceptorFileAccess');
 Route::get('/View/{fileName}','Books@viewBook')->middleware('authInterceptorFileAccess');
+Route::get('/SearchBook','Books@searchBook')->middleware('authInterceptorReader');
 
 /*
  * Guest RESTful APIs

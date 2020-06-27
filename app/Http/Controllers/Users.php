@@ -21,7 +21,7 @@ class Users extends Controller
 
 		$name = $req->input('name');
 		$role = $req->input('role');
-		$mobileNo = $req->input('mobile_no');
+		$mobileNo = $req->input('mobileNo');
 		$password = $req->input('password');
 
 		error_log($name);
