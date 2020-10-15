@@ -53,6 +53,9 @@ Route::get('/Download/{fileName}','Books@downloadBook')->middleware('authInterce
 Route::get('/View/{fileName}','Books@viewBook')->middleware('authInterceptorFileAccess');
 Route::get('/SearchBook','Books@searchBook')->middleware('authInterceptorReader');
 
+Route::get('/GetProfileData','Users@getProfileData')->middleware('authInterceptorReader');
+Route::post('/UpdateProfile','Users@updateProfile')->middleware('authInterceptorReader');
+
 /*
  * Guest RESTful APIs
 */

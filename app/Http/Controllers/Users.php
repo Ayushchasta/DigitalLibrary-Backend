@@ -21,7 +21,7 @@ class Users extends Controller
 
 		$name = $req->input('name');
 		$role = $req->input('role');
-		$mobileNo = $req->input('mobileNo');
+		$mobileNo = $req->input('mobile_no');
 		$password = $req->input('password');
 
 		error_log($name);
@@ -128,5 +128,37 @@ class Users extends Controller
 		error_log('ViewImage');
 		return Storage::Response('Uploads/' . $fileName);
 	}
+
+	public function getProfileData(Request $req)
+	{
+		error_log("GetProfileData");
+		$userId = $req->header('user_id');
+		error_log($userId);
+
+		return $profileData = DB::table('users')
+				->where('id',$userId)
+				->get();
+		
+	}
+	
+	public function updateProfile(Request $req)
+	{
+		$userId = $req->header('user_id');
+		error_log("updateProfile");
+		error_log($userId);
+
+		$name = $req->input('name');
+		$mobileNo = $req->input('mobile_no');
+		$password = $req->input('password');
+
+		return DB::table('users')
+			->where('id',$userId)
+			->update([
+				'name'=> $name,
+				'mobile_no'=> $mobileNo,
+				'password'=> $password,
+			]);
+	}
+
 }
 
